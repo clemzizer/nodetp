@@ -1,0 +1,24 @@
+{
+  "name": "tpnode",
+  "version": "1.0.0",
+  "description": "tp2 de async server tech",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clemzizer/nodetp.git"
+  },
+  "author": "Clément Voisin",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/clemzizer/nodetp/issues"
+  },
+  "homepage": "https://github.com/clemzizer/nodetp#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "nodemon": "^1.18.6"
+  },
+  "devDependencies": {}
+}

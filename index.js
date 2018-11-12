@@ -1,8 +1,10 @@
+const router = require('./router')
+const express = require('express')
 
-const http = require('http')
-const handles = require('./handles')
+const app = express()
+const port = 3000
 
-const server = http.createServer(handles.serverHandle);
-server.listen(8080)
+app.use('/', router)
 
 
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
