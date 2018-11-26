@@ -1,4 +1,5 @@
-import LevelDb = require('./leveldb')
+//import LevelDb = require('./leveldb')
+import {LevelDb} from './leveldb'
 import WriteStream from 'level-ws'
 
 

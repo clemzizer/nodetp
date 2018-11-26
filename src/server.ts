@@ -9,6 +9,8 @@ app.use(bodyparser.urlencoded())
 
 const port: string = process.env.PORT || '8080'
 
+const dbMet : MetricsHandler = new MetricsHandler('./db/metrics')
+
 app.get('/', (req: any, res: any) => {
   res.write('Hello world')
   res.end()
@@ -22,11 +24,30 @@ app.get('/metrics', (req: any, res: any) => {
       res.json(result)
     })
   })
+  
+  app.get('/metrics:id', (req: any, res: any) => {
+    MetricsHandler.get((err: Error | null, result?: any) => {
+      if (err) {
+        throw err
+      }
+      if(result===undefined) {
+        res.write('no result')
+        res.send
+      }
+      else res.json(result)
+    })
+  })
 
 
-// app.post('/metrics/:id', (req: any, res: any) => {
-//     dbMet.save(req.params.id, req.body)
-//   })
+app.post('/metrics/:id', (req: any, res: any) => {
+    dbMet.save(req.params.id, req.body, (err: Error | null, result?: any) => {
+      if (err) {
+        res.status(500).send(err.message)
+      }
+      //res.json(result)
+      res.status(200).send()
+    });
+  })
 
 app.listen(port, (err: Error) => {
   if (err) {
