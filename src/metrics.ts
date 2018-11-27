@@ -46,4 +46,13 @@ export class Metric {
       ]
       callback(null, result)
     }
+    
+    public remove(key: string, callback: (err: Error | null) => void) {
+      this.db.del(key, function (err) {
+        if (err)
+        throw err
+      });
+  
+      callback(null)
+    }
   }
