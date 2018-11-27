@@ -13,3 +13,7 @@
 >> #### npm start
 >
 > proceed by going to the URL http://localhost:8080/explains which will tell you more about how the program works
+>
+> To see the metrics GET request on http://localhost:8080/metrics or http://localhost:8080/metrics/id for a specific metric
+>
+> To push a metric PUT request http://localhost:8080/metrics/0 and set the body content to the timestamp you want (format json)
