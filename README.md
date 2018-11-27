@@ -2,7 +2,9 @@
 ## Clément VOISIN
 ### Introduction
 > v0.1 In this practical we have implemented a small program using modules, routing and parameters
+>
 > v0.2 In this second practical work we have updated our previous work to use Express
+>
 > v0.3 In this third practical work we created an app that can display and record metrics in a leveldb database
 
 ### Run instructions 
