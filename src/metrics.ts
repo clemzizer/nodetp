@@ -1,4 +1,5 @@
-import LevelDb = require('./leveldb')
+//import LevelDb = require('./leveldb')
+import {LevelDb} from './leveldb'
 import WriteStream from 'level-ws'
 
 
@@ -44,5 +45,14 @@ export class Metric {
         new Metric('2013-11-04 14:30 UTC', 15)
       ]
       callback(null, result)
+    }
+    
+    public remove(key: string, callback: (err: Error | null) => void) {
+      this.db.del(key, function (err) {
+        if (err)
+        throw err
+      });
+  
+      callback(null)
     }
   }

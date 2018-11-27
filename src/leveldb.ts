@@ -8,4 +8,5 @@ export class LevelDb {
     const encoded = encoding(leveldown(path), { valueEncoding: 'json' })
     return levelup(encoded)
   }
+
 }
