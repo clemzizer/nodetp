@@ -39,7 +39,7 @@ app.get('/metrics', (req: any, res: any) => {
     })
   })
   
-  app.get('/metrics:id', (req: any, res: any) => {
+  app.get('/metrics/:id', (req: any, res: any) => {
     MetricsHandler.get((err: Error | null, result?: any) => {
       if (err) {
         throw err
