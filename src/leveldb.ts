@@ -1,6 +1,8 @@
 import encoding from 'encoding-down'
 import leveldown from 'leveldown'
 import levelup from 'levelup'
+import fs = require('fs')
+import del = require('del')
 
 
 export class LevelDb {
@@ -9,4 +11,9 @@ export class LevelDb {
     return levelup(encoded)
   }
 
+  static clear(path: string) {
+    if (fs.existsSync(path)) {
+      del.sync(path, { force: true })
+    }
+  }
 }
