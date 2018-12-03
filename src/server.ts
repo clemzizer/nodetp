@@ -73,6 +73,13 @@ app.delete('/:id', (req: any, res: any, next: any) => {
   })
 
 
+/// Keep it in the end ///
+app.use((req: any, res: any) =>{
+  res.setHeader('Content-Type', 'text/plain')
+  res.status(404).send('Error 404. Message not found.')
+})
+//////////////////////////
+
 app.listen(port, (err: Error) => {
   if (err) {
     throw err
