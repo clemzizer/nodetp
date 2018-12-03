@@ -26,10 +26,7 @@ app.get('/hello/:name', (req: any, res: any) =>{
   else res.send('Hello ' + req.params.name) 
 })
 
-app.use((req: any, res: any) =>{
-  res.setHeader('Content-Type', 'text/plain')
-  res.status(404).send('Error 404. Message not found.')
-})
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
