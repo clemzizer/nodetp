@@ -37,6 +37,16 @@ app.get('/', (req: any, res: any) => {
   res.send('Server is up!!!')
   res.end()
 })
+<<<<<<< HEAD
+=======
+app.get('/hello/:name', (req: any, res: any) =>{
+  res.setHeader('Content-Type', 'text/plain')
+  if(req.params.name === 'Clement') res.send('Hi! My name is Clement, I\'m a 5th year student at ECE Paris studying BigData & Analytics')
+  else res.send('Hello ' + req.params.name) 
+})
+
+
+>>>>>>> 7f5b9918e1ff0c09b85f55110bae930ae541cfc5
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Metrics
@@ -52,7 +62,24 @@ app.get('/metrics/:id', (req: any, res: any, next:any) => {
     }
     else {
       res.json(result)
+<<<<<<< HEAD
     }
+=======
+    })
+  })
+  
+  app.get('/metrics/:id', (req: any, res: any) => {
+    MetricsHandler.get((err: Error | null, result?: any) => {
+      if (err) {
+        throw err
+      }
+      if(result===undefined) {
+        res.write('no result')
+        res.send()
+      }
+      else res.json(result)
+    })
+>>>>>>> 7f5b9918e1ff0c09b85f55110bae930ae541cfc5
   })
 })
 
@@ -81,6 +108,13 @@ app.use((req: any, res: any) => {
   res.status(404).send('Error 404. Message not found.')
 })
 
+
+/// Keep it in the end ///
+app.use((req: any, res: any) =>{
+  res.setHeader('Content-Type', 'text/plain')
+  res.status(404).send('Error 404. Message not found.')
+})
+//////////////////////////
 
 app.listen(port, (err: Error) => {
   if (err) {
