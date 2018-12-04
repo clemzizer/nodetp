@@ -72,7 +72,9 @@ export class MetricsHandler {
         if (key != k) {
           console.log(`LevelDB error: ${data} does not match key ${key}`)
         } else {
-          this.db.del(`metrics:${key}:${timestamp}`, (err)=>{if(err)throw(err)})
+          this.db.del(`metrics:${key}:${timestamp}`, (err:Error |null)=>{
+            callback(err)
+          })
         }
       })
 
