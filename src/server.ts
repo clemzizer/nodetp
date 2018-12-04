@@ -57,6 +57,9 @@ app.get('/metrics/:id', (req: any, res: any, next:any) => {
 })
 
 app.post('/metrics/:id', (req: any, res: any, next: any) => {
+  //console.log(req)
+  //console.log(req.params)
+  console.log(req.body)
   dbMet.save(req.params.id, req.body, (err: Error | null) => {
     if (err) {
       next(err)

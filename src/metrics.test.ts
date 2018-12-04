@@ -26,22 +26,66 @@ describe('Metrics', function () {
     })
 
     describe('#save', function () {
+        before(function () {
+            dbMet.save(2, [
+                { "timestamp": "1384686660000", "value": 10 }
+            ], (err: Error | null) => {
+                expect(err).to.be.undefined
+            });
+        })
+        after(function () {
+            dbMet.get("2", function (err: Error | null, result?: Metric[]) {
+                expect(err).to.be.null
+                expect(result).to.not.be.undefined
+                expect(result).not.to.be.empty
+            })
+        })
+
+
         it('should save data', function () {
-            // TODO
+            dbMet.save(1, [
+                { "timestamp": "1384686660000", "value": 10 }
+            ], (err: Error | null) => {
+                expect(err).to.be.undefined
+            });
         })
 
         it('should update data', function () {
-            // TODO
+            dbMet.save(2, [
+                { "timestamp": "1384686660001", "value": 10 }
+            ], (err: Error | null) => {
+                expect(err).to.be.undefined
+            });
         })
     })
 
     describe('#delete', function () {
+        before(function () {
+            dbMet.save(3, [
+                { "timestamp": "1384686660000", "value": 10 }
+            ], (err: Error | null) => {
+                expect(err).to.be.undefined
+            });
+        })
+        after(function(){
+            dbMet.get("3", function (err: Error | null, result?: Metric[]) {
+                expect(err).to.be.null
+                expect(result).to.not.be.undefined
+                expect(result).to.be.empty
+            })
+        })
+
+
         it('should delete data', function () {
-            // TODO
+            dbMet.remove("3", (err: Error | null) => {
+                expect(err).to.be.null
+            })
         })
 
         it('should not fail if data does not exist', function () {
-            // TODO
+            dbMet.remove("undefined", (err: Error | null) => {
+                expect(err).to.be.null
+            })
         })
     })
 })

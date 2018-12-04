@@ -22,24 +22,6 @@ export class MetricsHandler {
     this.db = LevelDb.open(dbPath)
   }
 
-  public save(key: number, metrics: Metric[], callback: (error: Error | null) => void) {
-    const stream = WriteStream(this.db)
-
-    stream.on('error', callback)
-    stream.on('close', callback)
-
-    metrics.forEach(m => {
-      stream.write({ key: `metrics:${key}:${m.timestamp}`, value: m.value })
-    })
-
-    stream.end()
-
-    /*   or
-    met.forEach(m:Metric)=>{
-        this.db.put(`metrics:${key}${m.timestamp}`, value: m.value )
-    } */
-  }
-
   public get(key: string, callback: (error: Error | null, result?: Metric[]) => void) {
     const stream = this.db.createReadStream()
     var met: Metric[] = []
@@ -60,6 +42,24 @@ export class MetricsHandler {
       })
   }
 
+  public save(key: number, metrics: Metric[], callback: (error: Error | null) => void) {
+    const stream = WriteStream(this.db)
+
+    stream.on('error', callback)
+    stream.on('close', callback)
+
+    metrics.forEach(m => {
+      stream.write({ key: `metrics:${key}:${m.timestamp}`, value: m.value })
+    })
+
+    stream.end()
+
+    /*   or
+    met.forEach(m:Metric)=>{
+        this.db.put(`metrics:${key}${m.timestamp}`, value: m.value )
+    } */
+  }
+
   public remove(key: string, callback: (err: Error | null) => void) {
     const readStream = this.db.createReadStream()
     var met: Metric[] = []
@@ -76,11 +76,11 @@ export class MetricsHandler {
         }
       })
 
-    
-    const stream = this.db.createKeyStream()
+    ///For logging and checking purposes
+  /*   const stream = this.db.createKeyStream()
     .on('data', function (data) {
       console.log('key=', data)
-    })
+    }) */
     callback(null)
   }
 }
