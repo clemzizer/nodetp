@@ -11,7 +11,7 @@ export class UserHandler {
     public get(username: string, callback: (err: Error | null, result?: User) => void) {
         this.db.get(`user:${username}`, function (err: Error, data: any) {
             if (err) throw callback(err)
-            callback(null, User.fromDb(data))
+            // callback(null, User.fromDb(data))
         })
     }
 
@@ -37,6 +37,7 @@ export class User {
         } else this.password = password
     }
     static fromDb(data: any): User {
+        return new User("", "", "");
         // Parse db result and return a User
     }
 
@@ -49,6 +50,7 @@ export class User {
     }
 
     public validatePassword(toValidate: String): boolean {
+        return false;
         // return comparison with hashed password
     }
 }
