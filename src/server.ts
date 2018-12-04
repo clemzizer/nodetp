@@ -21,7 +21,7 @@ const userRouter = express.Router()
 
 const app = express()
 app.use(bodyparser.json())
-app.use(bodyparser.urlencoded())
+app.use(bodyparser.urlencoded({extended: true}))
 app.use(morgan('dev'))
 
 
@@ -86,10 +86,11 @@ userRouter.post('/', function (req: any, res: any, next: any) {
   })
 })
 
-userRouter.get('/', (req: any, res: any, next: any) => {
-  dbUser.get(req.body.username, (err: Error | null, result?: User) => {
+userRouter.get('/:username', (req: any, res: any, next: any) => {
+  dbUser.get(req.params.username, (err: Error | null, result?: User) => {
     if (err) next(err)
-    if (result === undefined || !result.validatePassword(req.body.username)) {
+    // if (result === undefined || !result.validatePassword(req.body.username)) {
+    if (result === undefined) {
       res.status(404).send("User not found")
     } else {
       res.status(200).json(result)
