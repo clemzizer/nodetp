@@ -19,7 +19,7 @@ const dbUser: UserHandler = new UserHandler('./db/users')
 
 const app = express()
 app.use(bodyparser.json())
-app.use(bodyparser.urlencoded({extended: true}))
+app.use(bodyparser.urlencoded({ extended: true }))
 app.use(morgan('dev'))
 
 
@@ -49,15 +49,12 @@ const authRouter = express.Router()
 
 
 authRouter.get('/login', (req: any, res: any) => {
-  res.render('login')
+  res.render('login', { message: null })
 })
 
 authRouter.get('/signup', (req: any, res: any) => {
-  res.render('signup')
+  res.render('signup', { message: null })
 })
-/* authRouter.get('/metrics', (req: any, res: any) => {
-  res.render('metrics')
-}) */
 authRouter.get('/logout', (req: any, res: any) => {
   if (req.session.loggedIn) {
     delete req.session.loggedIn
@@ -70,28 +67,24 @@ authRouter.post('/login', (req: any, res: any, next: any) => {
   dbUser.get(req.body.username, (err: Error | null, result?: User) => {
     if (err) next(err)
     if (result === undefined || !result.validatePassword(req.body.password)) {
-      res.send("not logged in")
-      //res.redirect('/login')
+      res.render('login', { message: "Wrong username or password !!!!" })
     } else {
       req.session.loggedIn = true
       req.session.user = result
       res.redirect('/')
-      //res.send("logged in")
-      //res.redirect('/metrics')
     }
   })
 })
-
-authRouter.post('/signup', (req:any, res:any, next:any)=>{
+authRouter.post('/signup', (req: any, res: any, next: any) => {
   //How can you use your own API ??
   dbUser.get(req.body.username, function (err: Error | null, result?: User) {
     if (!err || result !== undefined) {
-      if(result!==undefined) res.status(409).send("user already exists")
+      if (result !== undefined) res.render('signup', { message: "User already exists try again!" })
       else res.send(err)
     } else {
       dbUser.save(req.body, function (err: Error | null) {
         if (err) next(err)
-        else res.status(201).send("User saved !!!")
+        else res.render('login', { message: "User saved !!! Now login:" })
       })
     }
   })
@@ -106,12 +99,11 @@ app.use(authRouter)
 const authCheck = function (req: any, res: any, next: any) {
   if (req.session.loggedIn) {
     next()
-  } else //res.redirect('/login') 
-  next()
+  } else res.render('login', { message: "You need to login" })
 }
 
 app.get('/', authCheck, (req: any, res: any) => {
-  res.render('metrics', { name: req.session.username })
+  res.render('metrics', { name: req.session.user.username })
 })
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,12 +114,12 @@ const userRouter = express.Router()
 userRouter.post('/', function (req: any, res: any, next: any) {
   dbUser.get(req.body.username, function (err: Error | null, result?: User) {
     if (!err || result !== undefined) {
-      if(result!==undefined) res.status(409).send("user already exists")
+      if (result !== undefined) res.render('signup', { message: "User already exists !!!" })
       else res.send(err)
     } else {
       dbUser.save(req.body, function (err: Error | null) {
         if (err) next(err)
-        else res.status(201).send("User saved !!!")
+        else res.render('login', { message: "User created !!!" })
       })
     }
   })
@@ -176,6 +168,7 @@ metricsRouter.get('/:id', (req: any, res: any, next: any) => {
     }
   })
 })
+
 
 metricsRouter.post('/:id', (req: any, res: any, next: any) => {
   //console.log(req)

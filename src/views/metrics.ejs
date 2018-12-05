@@ -7,31 +7,61 @@
 
 <body class="container">
     <div class="col-md-6.col-md-offset-3">
-        <p>Hello <%= name %>, here are your metrics!
+        <p>Hello
+            <%= name %>, here are your metrics!
         </p>
-       
+        <hr>
         <button class="btn btn-success" id="show-metrics">
             Bring the metrics
         </button>
-        <div id="metrics"></div>
+        <div id="metrics">Hello</div>
+        <hr>
     </div>
+
+    <br>
+    <hr>
+    <div class="col-md-6.col-md-offset-3">
+        <br>
+        <form action="/login" method="post">
+            <div class="form-group">
+                <label for="form_timestamp">Timestamp: </label>
+                <input id="form_timestamp" type="text" name="timestamp" />
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="form_value">Value: </label>
+                <input id="form_value" type="text" name="text" />
+            </div>
+            <br>
+            <button class="btn btn-primary btn-block" type="submit" value="Submit">Add metric</button>
+        </form>
+    </div>
+    <hr>
+
+
+    <br>
     <button class="btn btn-danger" href="/logout" onClick='document.location.href="/logout"'>
         Logout
     </button>
 </body>
 
-
 <script>
-    $('#show-metrics').click((e) => {
-        document.write(5 + 6);
-        e.preventDefault();
-        $.getJSON("/metrics.json", {}, (data) => {
-            const content = data.map(d => {
-                `<p>timestamp: ${d.timestamp}, value: ${d.value}</p>`
-            })
-            $('#metrics').append(content.join("\n"));
-        });
-    })
+       $('#show-metrics').click((e) => {
+           e.preventDefault()
+           $.getJSON('/metrics/1', {}, (data) => {
+               const content = data.map(d => {
+                   return `<p>timestamp: ${d.timestamp}, value: ${d.value}</p>`
+               })
+            //    const content =`<p>timestamp: ${data.timestamp}, value: ${data.value}</p>`
+               $("#metrics").append(content)
+           })
+       })
+
+    /* $('#show-metrics').click((e) => {
+        const content ='<p>timestamp: Test, value: Test</p>'
+        $("#metrics").append(content)
+        $("#metrics").append("\n")
+    }) */
 </script>
 
 </html>

@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/clemzizer/nodetp#readme",
   "dependencies": {
+    "ajax": "0.0.4",
     "body-parser": "^1.18.3",
     "del": "^3.0.0",
     "encoding-down": "^5.0.4",
