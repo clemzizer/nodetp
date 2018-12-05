@@ -8,13 +8,13 @@
 <body class="container">
     <div class="col-md-6.col-md-offset-3">
         <p>Hello
-            <%= name %>, here are your metrics!
+            <%= name %>, click bellow to see your metrics!
         </p>
         <hr>
         <button class="btn btn-success" id="show-metrics">
             Bring the metrics
         </button>
-        <div id="metrics">Hello</div>
+        <div id="metrics"></div>
         <hr>
     </div>
 
@@ -22,7 +22,12 @@
     <hr>
     <div class="col-md-6.col-md-offset-3">
         <br>
-        <form action="/login" method="post">
+        <form id="push-metric" method="post">
+            <div class="form-group">
+                <label for="form_id">ID: </label>
+                <input id="form_id" type="text" name="id" />
+            </div>
+            <br>
             <div class="form-group">
                 <label for="form_timestamp">Timestamp: </label>
                 <input id="form_timestamp" type="text" name="timestamp" />
@@ -30,15 +35,13 @@
             <br>
             <div class="form-group">
                 <label for="form_value">Value: </label>
-                <input id="form_value" type="text" name="text" />
+                <input id="form_value" type="text" name="value" />
             </div>
             <br>
             <button class="btn btn-primary btn-block" type="submit" value="Submit">Add metric</button>
         </form>
     </div>
     <hr>
-
-
     <br>
     <button class="btn btn-danger" href="/logout" onClick='document.location.href="/logout"'>
         Logout
@@ -46,22 +49,40 @@
 </body>
 
 <script>
-       $('#show-metrics').click((e) => {
-           e.preventDefault()
-           $.getJSON('/metrics/1', {}, (data) => {
-               const content = data.map(d => {
-                   return `<p>timestamp: ${d.timestamp}, value: ${d.value}</p>`
-               })
-            //    const content =`<p>timestamp: ${data.timestamp}, value: ${data.value}</p>`
-               $("#metrics").append(content)
-           })
-       })
+    $('#show-metrics').click((e) => {
+        e.preventDefault()
+        $.getJSON('/metrics/all', {}, (data) => {
+            let i=0
+            const content = data.map(d => {
+                i++
+                return `<p>id: ${i}, timestamp: ${d.timestamp}, value: ${d.value}</p>`
+            })
+            $("#metrics").html(content)
+        })
+    })
 
-    /* $('#show-metrics').click((e) => {
-        const content ='<p>timestamp: Test, value: Test</p>'
-        $("#metrics").append(content)
-        $("#metrics").append("\n")
-    }) */
+    /*  
+     $('#push-metric').submit((e) => {
+         const formData = new FormData(e.target);
+         tm=formData.get("name").toString()
+         val=formData.get("value").toString()
+ 
+         $.post('/metrics/1', {"timestamp":"1384686660000", "value":2}, function(data){
+             $.getJSON('/metrics/1',{}, (data) => {
+                 $("#metrics").append(`<p>timestamp: ${data.timestamp}, value: ${data.value}</p>`)
+             })
+         })
+         e.preventDefault();
+     })
+  */
+    $('#push-metric').submit((e) => {
+        alert("Handler for .submit() called.");
+        $.post('/metrics/2', {"timestamp": "1384686660000", "value":"2"}, function (data) {
+            alert("Handler for .post() called.");
+        })
+        e.preventDefault();
+    })
+
 </script>
 
 </html>

@@ -28,7 +28,7 @@ app.set('view engine', 'ejs');
 
 const port: string = process.env.PORT || '8080'
 
-const dbMet: MetricsHandler = new MetricsHandler('./db/metrics')
+let dbMet: MetricsHandler 
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,6 +98,7 @@ app.use(authRouter)
 
 const authCheck = function (req: any, res: any, next: any) {
   if (req.session.loggedIn) {
+    if(dbMet==undefined)dbMet= new MetricsHandler(`./db/${req.session.user.username}`)
     next()
   } else res.render('login', { message: "You need to login" })
 }
@@ -136,10 +137,10 @@ userRouter.get('/:username', (req: any, res: any, next: any) => {
     }
   })
 })
-app.delete('/user/:id', (req: any, res: any, next: any) => {
-  dbUser.delete(req.params.id, (err: Error | null) => {
+userRouter.delete('/:username', (req: any, res: any, next: any) => {
+  dbUser.delete(req.params.username, (err: Error | null) => {
     if (err) next(err)
-    else res.status(200).send("If the userid exists it has been deleted !!!")
+    else res.status(200).send("If the username exists it has been deleted !!!")
   })
 })
 
@@ -160,8 +161,7 @@ metricsRouter.get('/:id', (req: any, res: any, next: any) => {
       next(err)
     }
     if (result === undefined) {
-      res.write('no result')
-      res.send()
+      res.send('No result')
     }
     else {
       res.json(result)
@@ -169,11 +169,9 @@ metricsRouter.get('/:id', (req: any, res: any, next: any) => {
   })
 })
 
-
 metricsRouter.post('/:id', (req: any, res: any, next: any) => {
-  //console.log(req)
   //console.log(req.params)
-  console.log(req.body)
+  //console.log(req.body)
   dbMet.save(req.params.id, req.body, (err: Error | null) => {
     if (err) {
       next(err)
@@ -186,7 +184,7 @@ metricsRouter.post('/:id', (req: any, res: any, next: any) => {
 metricsRouter.delete('/:id', (req: any, res: any, next: any) => {
   dbMet.remove(req.params.id, (err: Error | null) => {
     if (err) next(err)
-    else res.status(200).send("If the metrics Id exists it has been deleted !!!")
+    else res.status(200).send("If the metrics ID exists it has been deleted !!!")
   })
 })
 

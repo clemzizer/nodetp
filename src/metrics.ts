@@ -34,7 +34,10 @@ export class MetricsHandler {
         const [_, k, timestamp] = data.key.split(":")
         const value = data.value
 
-        if (key != k) {
+        if (key == "all") {
+          met.push(new Metric(timestamp, value))
+        }
+        else if (key != k) {
           console.log(`LevelDB error: ${data} does not match key ${key}`)
         } else {
           met.push(new Metric(timestamp, value))
@@ -42,15 +45,18 @@ export class MetricsHandler {
       })
   }
 
-  public save(key: number, metrics: Metric[], callback: (error: Error | null) => void) {
+  public save(key: number, metrics: Metric, callback: (error: Error | null) => void) {
     const stream = WriteStream(this.db)
 
     stream.on('error', callback)
     stream.on('close', callback)
 
-    metrics.forEach(m => {
-      stream.write({ key: `metrics:${key}:${m.timestamp}`, value: m.value })
-    })
+    // metrics.forEach(m => {
+    //   stream.write({ key: `metrics:${key}:${m.timestamp}`, value: m.value })
+    // })
+
+    stream.write({ key: `metrics:${key}:${metrics.timestamp}`, value: metrics.value })
+
 
     stream.end()
 
@@ -72,14 +78,14 @@ export class MetricsHandler {
         if (key != k) {
           console.log(`LevelDB error: ${data} does not match key ${key}`)
         } else {
-          this.db.del(`metrics:${key}:${timestamp}`, (err:Error |null)=>{
-            callback(err)
+          this.db.del(`metrics:${key}:${timestamp}`, (err: Error | null) => {
+            //callback(err)
           })
         }
       })
 
     ///For logging and checking purposes
-  /*   const stream = this.db.createKeyStream()
+    /*   const stream = this.db.createKeyStream()
     .on('data', function (data) {
       console.log('key=', data)
     }) */
