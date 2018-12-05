@@ -43,13 +43,16 @@ app.use(session({
   saveUninitialized: true
 }))
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // User Authentication
 
 app.get('/login', (req: any, res: any) => {
   res.render('login')
 })
-
+app.get('/signup', (req: any, res: any) => {
+  res.render('signup')
+})
 app.get('/logout', (req: any, res: any) => {
   delete req.session.loggedIn
   delete req.session.user
@@ -59,14 +62,43 @@ app.get('/logout', (req: any, res: any) => {
 app.post('/login', (req: any, res: any, next: any) => {
   dbUser.get(req.body.username, (err: Error | null, result?: User) => {
     if (err) next(err)
-    if (result === undefined || !result.validatePassword(req.body.username)) {
-      res.redirect('/login')
+    if (result === undefined || !result.validatePassword(req.body.password)) {
+      res.send("not logged in")
+      //res.redirect('/login')
     } else {
       req.session.loggedIn = true
       req.session.user = result
-      res.redirect('/')
+      //res.redirect('/')
+      res.send("logged in")
     }
   })
+})
+app.post('/signup', (req:any, res:any, next:any)=>{
+  //How can you use your own API ??
+  dbUser.get(req.body.username, function (err: Error | null, result?: User) {
+    if (!err || result !== undefined) {
+      if(result!==undefined) res.status(409).send("user already exists")
+      else res.send(err)
+    } else {
+      dbUser.save(req.body, function (err: Error | null) {
+        if (err) next(err)
+        else res.status(201).send("User saved !!!")
+      })
+    }
+  })
+})
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// User Authorization Middleware
+
+const authCheck = function (req: any, res: any, next: any) {
+  if (req.session.loggedIn) {
+    next()
+  } else res.redirect('/login')
+}
+
+app.get('/', authCheck, (req: any, res: any) => {
+  res.render('index', { name: req.session.username })
 })
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
