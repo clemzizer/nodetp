@@ -1,0 +1,37 @@
+<html>
+
+<head>
+    <% include partials/head %>
+</head>
+
+
+<body class="container">
+    <div class="col-md-6.col-md-offset-3">
+        <p>Hello <%= name %>, here are your metrics!
+        </p>
+       
+        <button class="btn btn-success" id="show-metrics">
+            Bring the metrics
+        </button>
+        <div id="metrics"></div>
+    </div>
+    <button class="btn btn-danger" href="/logout" onClick='document.location.href="/logout"'>
+        Logout
+    </button>
+</body>
+
+
+<script>
+    $('#show-metrics').click((e) => {
+        document.write(5 + 6);
+        e.preventDefault();
+        $.getJSON("/metrics.json", {}, (data) => {
+            const content = data.map(d => {
+                `<p>timestamp: ${d.timestamp}, value: ${d.value}</p>`
+            })
+            $('#metrics').append(content.join("\n"));
+        });
+    })
+</script>
+
+</html>

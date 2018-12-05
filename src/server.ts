@@ -16,8 +16,6 @@ const LevelStore = levelSession(session)
 import { UserHandler, User } from './user'
 const dbUser: UserHandler = new UserHandler('./db/users')
 
-const userRouter = express.Router()
-
 
 const app = express()
 app.use(bodyparser.json())
@@ -47,19 +45,28 @@ app.use(session({
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // User Authentication
 
-app.get('/login', (req: any, res: any) => {
+const authRouter = express.Router()
+
+
+authRouter.get('/login', (req: any, res: any) => {
   res.render('login')
 })
-app.get('/signup', (req: any, res: any) => {
+
+authRouter.get('/signup', (req: any, res: any) => {
   res.render('signup')
 })
-app.get('/logout', (req: any, res: any) => {
-  delete req.session.loggedIn
-  delete req.session.user
+/* authRouter.get('/metrics', (req: any, res: any) => {
+  res.render('metrics')
+}) */
+authRouter.get('/logout', (req: any, res: any) => {
+  if (req.session.loggedIn) {
+    delete req.session.loggedIn
+    delete req.session.user
+  }
   res.redirect('/login')
 })
 
-app.post('/login', (req: any, res: any, next: any) => {
+authRouter.post('/login', (req: any, res: any, next: any) => {
   dbUser.get(req.body.username, (err: Error | null, result?: User) => {
     if (err) next(err)
     if (result === undefined || !result.validatePassword(req.body.password)) {
@@ -68,12 +75,14 @@ app.post('/login', (req: any, res: any, next: any) => {
     } else {
       req.session.loggedIn = true
       req.session.user = result
-      //res.redirect('/')
-      res.send("logged in")
+      res.redirect('/')
+      //res.send("logged in")
+      //res.redirect('/metrics')
     }
   })
 })
-app.post('/signup', (req:any, res:any, next:any)=>{
+
+authRouter.post('/signup', (req:any, res:any, next:any)=>{
   //How can you use your own API ??
   dbUser.get(req.body.username, function (err: Error | null, result?: User) {
     if (!err || result !== undefined) {
@@ -88,21 +97,27 @@ app.post('/signup', (req:any, res:any, next:any)=>{
   })
 })
 
+
+app.use(authRouter)
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // User Authorization Middleware
 
 const authCheck = function (req: any, res: any, next: any) {
   if (req.session.loggedIn) {
     next()
-  } else res.redirect('/login')
+  } else //res.redirect('/login') 
+  next()
 }
 
 app.get('/', authCheck, (req: any, res: any) => {
-  res.render('index', { name: req.session.username })
+  res.render('metrics', { name: req.session.username })
 })
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // User creation and retreival
+
+const userRouter = express.Router()
 
 userRouter.post('/', function (req: any, res: any, next: any) {
   dbUser.get(req.body.username, function (err: Error | null, result?: User) {
@@ -145,8 +160,9 @@ app.use('/user', userRouter)
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Metrics
+const metricsRouter = express.Router()
 
-app.get('/metrics/:id', (req: any, res: any, next: any) => {
+metricsRouter.get('/:id', (req: any, res: any, next: any) => {
   dbMet.get(req.params.id, (err: Error | null, result?: Metric[]) => {
     if (err) {
       next(err)
@@ -161,7 +177,7 @@ app.get('/metrics/:id', (req: any, res: any, next: any) => {
   })
 })
 
-app.post('/metrics/:id', (req: any, res: any, next: any) => {
+metricsRouter.post('/:id', (req: any, res: any, next: any) => {
   //console.log(req)
   //console.log(req.params)
   console.log(req.body)
@@ -174,12 +190,14 @@ app.post('/metrics/:id', (req: any, res: any, next: any) => {
   });
 })
 
-app.delete('/metrics/:id', (req: any, res: any, next: any) => {
+metricsRouter.delete('/:id', (req: any, res: any, next: any) => {
   dbMet.remove(req.params.id, (err: Error | null) => {
     if (err) next(err)
     else res.status(200).send("If the metrics Id exists it has been deleted !!!")
   })
 })
+
+app.use('/metrics', authCheck, metricsRouter)
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
