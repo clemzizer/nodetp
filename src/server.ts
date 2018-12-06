@@ -28,7 +28,7 @@ app.set('view engine', 'ejs');
 
 const port: string = process.env.PORT || '8080'
 
-let dbMet: MetricsHandler 
+let dbMet: MetricsHandler | undefined
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,7 +59,9 @@ authRouter.get('/logout', (req: any, res: any) => {
   if (req.session.loggedIn) {
     delete req.session.loggedIn
     delete req.session.user
+    dbMet = undefined
   }
+   dbMet = undefined
   res.redirect('/login')
 })
 
@@ -156,6 +158,7 @@ app.use('/user', userRouter)
 const metricsRouter = express.Router()
 
 metricsRouter.get('/:id', (req: any, res: any, next: any) => {
+  if(dbMet==undefined)dbMet= new MetricsHandler(`./db/${req.session.user.username}`)
   dbMet.get(req.params.id, (err: Error | null, result?: Metric[]) => {
     if (err) {
       next(err)
@@ -172,6 +175,7 @@ metricsRouter.get('/:id', (req: any, res: any, next: any) => {
 metricsRouter.post('/:id', (req: any, res: any, next: any) => {
   //console.log(req.params)
   //console.log(req.body)
+  if(dbMet==undefined)dbMet= new MetricsHandler(`./db/${req.session.user.username}`)
   dbMet.save(req.params.id, req.body, (err: Error | null) => {
     if (err) {
       next(err)
@@ -182,6 +186,7 @@ metricsRouter.post('/:id', (req: any, res: any, next: any) => {
 })
 
 metricsRouter.delete('/:id', (req: any, res: any, next: any) => {
+  if(dbMet==undefined)dbMet= new MetricsHandler(`./db/${req.session.user.username}`)
   dbMet.remove(req.params.id, (err: Error | null) => {
     if (err) next(err)
     else res.status(200).send("If the metrics ID exists it has been deleted !!!")
