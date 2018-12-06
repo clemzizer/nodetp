@@ -82,5 +82,7 @@
 >
 #### Delete a user 
 >
+>Same as for getting a user's credentials, left open for testing purposes
+>
 >> ##### DELETE localhost:8080/user/:username
 >
