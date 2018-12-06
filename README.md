@@ -1,19 +1,31 @@
-# Nodetp3 
+# Project Node
 ## Clément VOISIN
 ### Introduction
-> v0.1 In this practical we have implemented a small program using modules, routing and parameters
+> We have implemeted a web API that allows us to CRUD a user and CRUD his and only his metrics
 >
-> v0.2 In this second practical work we have updated our previous work to use Express
->
-> v0.3 In this third practical work we created an app that can display and record metrics in a leveldb database
+> There is a functional front interface that allows you to use these APIs
 
 ### Run instructions 
->To start using the program first launch a terminal/shell in the current folder then run 
+>To start using the program first launch a terminal/shell in the current folder then run:
 >
+>> #### npm install 
+>
+> You may then run: 
+>
+>> #### npm test 
+>
+>>
+> Go to the root of the website then create a "db" folder
+>
+> You can now run the following command and start using the website and APIs 
 >> #### npm start
+> 
+> To get started quickly go to localhost:8080/populate and click on create user 1 and create user 2
 >
-> proceed by going to the URL http://localhost:8080/explains which will tell you more about how the program works
->
-> To see the metrics GET request on http://localhost:8080/metrics or http://localhost:8080/metrics/id for a specific metric
->
-> To push a metric PUT request http://localhost:8080/metrics/0 and set the body content to the timestamp you want (format json)
+> You may now go back to localhost:8080 to login with the first user:
+>> ##### Username = user
+>> ##### Password = pwd
+> Or the second user:
+>> ##### Username = user2
+>> ##### Password = pwd
+
