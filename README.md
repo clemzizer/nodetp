@@ -6,7 +6,7 @@
 > There is a functional front interface that allows you to use these APIs
 
 ### Run instructions 
->To start using the program first launch a terminal/shell in the current folder then run:
+>To start using the program first launch a terminal/shell in the nodetp folder then run:
 >
 >> #### npm install 
 >
