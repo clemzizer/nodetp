@@ -1,0 +1,63 @@
+<script src="https://code.jquery.com/jquery-3.3.1.min.js">
+
+</script>
+<html>
+
+<button class="btn btn-success" id="populate1">
+  Create user 1 & populate
+</button>
+<button class="btn btn-success" id="populate2">
+  Create user 2 & populate
+</button>
+
+</html>
+
+
+<script>
+  //Signups
+
+  $('#populate1').click((e) => {
+    e.preventDefault()
+    $.post('/signup', { "username": "user", "password": "pwd", "email": "email" }, () => {
+      $.post('/login', { "username": "user", "password": "pwd" }, () => {
+        $.post('/metrics/1', { "timestamp": "1384686660004", "value": "2" }, () => {
+          $.post('/metrics/1', { "timestamp": "1384686660005", "value": "2" }, () => {
+            $.post('/metrics/1', { "timestamp": "1384686660006", "value": "10" }, () => {
+              $.post('/metrics/2', { "timestamp": "1384686660015", "value": "5" }, () => {
+                $.post('/metrics/3', { "timestamp": "1384686660025", "value": "11" }, ()=>{
+                  $.get('/logout')
+                })
+              })
+            })
+          })
+        })
+      })
+    })
+    alert("Create and populated user 1")
+  })
+
+
+  $('#populate2').click((e) => {
+    e.preventDefault()
+    $.post('/signup', { "username": "user2", "password": "pwd", "email": "email" }, () => {
+      $.post('/login', { "username": "user2", "password": "pwd" }, () => {
+        $.post('/metrics/1', { "timestamp": "1384686660013", "value": "1000" }, () => {
+          $.post('/metrics/1', { "timestamp": "1384686660103", "value": "1" }, () => {
+            $.post('/metrics/1', { "timestamp": "1384686662003", "value": "5" }, () => {
+              $.post('/metrics/2', { "timestamp": "1384686660313", "value": "6" }, () => {
+                $.post('/metrics/3', { "timestamp": "1384686660090", "value": "87" }, ()=>{
+                  $.get('/logout')
+                })
+              })
+            })
+          })
+        })
+      })
+    })
+    alert("populated")
+  })
+
+
+
+
+</script>

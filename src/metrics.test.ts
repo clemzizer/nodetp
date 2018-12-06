@@ -28,7 +28,7 @@ describe('Metrics', function () {
     describe('#save', function () {
         before(function () {
             dbMet.save(2, 
-                { "timestamp": "1384686660000", "value": 10 }
+                { "timestamp": "1384686660000", "value": 10 , "key":"1"}
             , (err: Error | null) => {
                 expect(err).to.be.undefined
             });
@@ -44,7 +44,7 @@ describe('Metrics', function () {
 
         it('should save data', function () {
             dbMet.save(1, 
-                { "timestamp": "1384686660000", "value": 10 }
+                { "timestamp": "1384686660000", "value": 10, "key":"1"}
             , (err: Error | null) => {
                 expect(err).to.be.undefined
             });
@@ -52,7 +52,7 @@ describe('Metrics', function () {
 
         it('should update data', function () {
             dbMet.save(2, 
-                { "timestamp": "1384686660001", "value": 10 }
+                { "timestamp": "1384686660001", "value": 10, "key":"1" }
             , (err: Error | null) => {
                 expect(err).to.be.undefined
             });
@@ -62,7 +62,7 @@ describe('Metrics', function () {
     describe('#delete', function () {
         before(function () {
             dbMet.save(3, 
-                { "timestamp": "1384686660000", "value": 10 }
+                { "timestamp": "1384686660000", "value": 10, "key":"1" }
             , (err: Error | null) => {
                 expect(err).to.be.undefined
             });

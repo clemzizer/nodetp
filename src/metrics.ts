@@ -7,10 +7,12 @@ import WriteStream from 'level-ws'
 export class Metric {
   public timestamp: string
   public value: number
+  public key: string
 
-  constructor(ts: string, v: number) {
+  constructor(ts: string, v: number, k:string) {
     this.timestamp = ts
     this.value = v
+    this.key=k
   }
 }
 
@@ -35,12 +37,12 @@ export class MetricsHandler {
         const value = data.value
 
         if (key == "all") {
-          met.push(new Metric(timestamp, value))
+          met.push(new Metric(timestamp, value, k))
         }
         else if (key != k) {
           console.log(`LevelDB error: ${data} does not match key ${key}`)
         } else {
-          met.push(new Metric(timestamp, value))
+          met.push(new Metric(timestamp, value, k))
         }
       })
   }

@@ -69,10 +69,8 @@
     $('#show-metrics').click((e) => {
         e.preventDefault()
         $.getJSON('/metrics/all', {}, (data) => {
-            let i = 0
             const content = data.map(d => {
-                i++
-                return `<p>id: ${i}, timestamp: ${d.timestamp}, value: ${d.value}</p>`
+                return `<p>id: ${d.key}, timestamp: ${d.timestamp}, value: ${d.value}</p>`
             })
             $("#metrics").html(content)
         })
